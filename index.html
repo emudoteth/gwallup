@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GWALLUP — Ride Into the Future</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --sunset-orange: #E8622A;
+      --sunset-gold: #F5A623;
+      --sunset-crimson: #C0392B;
+      --deep-purple: #1A0A2E;
+      --midnight: #0D0618;
+      --horizon: #2D1B4E;
+      --dust: #8B6F4E;
+      --pale-gold: #F0D080;
+      --text-primary: #F5E6C8;
+      --text-dim: #9B8B72;
+      --tab-width: 220px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--midnight);
+      color: var(--text-primary);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── LEFT SIDEBAR ── */
+    .sidebar {
+      width: var(--tab-width);
+      min-height: 100vh;
+      background: linear-gradient(180deg, #0D0618 0%, #1A0A2E 50%, #0D0618 100%);
+      border-right: 1px solid rgba(232, 98, 42, 0.2);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 100;
+    }
+
+    .sidebar-brand {
+      padding: 32px 24px 24px;
+      border-bottom: 1px solid rgba(232, 98, 42, 0.15);
+    }
+
+    .sidebar-brand .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--sunset-gold), var(--sunset-orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar-brand .tagline {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      padding: 24px 0;
+    }
+
+    .nav-tab {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 24px;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      position: relative;
+      transition: all 0.3s ease;
+      border-left: 3px solid transparent;
+    }
+
+    .nav-tab:hover {
+      background: rgba(232, 98, 42, 0.08);
+      border-left-color: rgba(232, 98, 42, 0.4);
+    }
+
+    .nav-tab.active {
+      background: linear-gradient(90deg, rgba(232, 98, 42, 0.15), transparent);
+      border-left-color: var(--sunset-orange);
+    }
+
+    .nav-tab .tab-icon {
+      font-size: 20px;
+      width: 28px;
+      text-align: center;
+    }
+
+    .nav-tab .tab-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      transition: color 0.3s;
+    }
+
+    .nav-tab.active .tab-label,
+    .nav-tab:hover .tab-label {
+      color: var(--sunset-gold);
+    }
+
+    .nav-tab .tab-number {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: rgba(232, 98, 42, 0.3);
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .nav-tab.active .tab-number {
+      color: var(--sunset-orange);
+    }
+
+    .sidebar-footer {
+      padding: 20px 24px;
+      border-top: 1px solid rgba(232, 98, 42, 0.1);
+    }
+
+    .sidebar-footer p {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      color: rgba(139, 111, 78, 0.5);
+      letter-spacing: 1px;
+      line-height: 1.8;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main {
+      margin-left: var(--tab-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      padding: 0 48px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(232, 98, 42, 0.15);
+      background: rgba(13, 6, 24, 0.8);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .header-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header-breadcrumb .crumb-root {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+
+    .header-breadcrumb .crumb-sep {
+      color: var(--sunset-orange);
+      font-size: 14px;
+    }
+
+    .header-breadcrumb .crumb-current {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--sunset-gold);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .status-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: rgba(232, 98, 42, 0.1);
+      border: 1px solid rgba(232, 98, 42, 0.25);
+      border-radius: 20px;
+      padding: 5px 14px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--sunset-orange);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .status-pill span {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--sunset-gold);
+      letter-spacing: 2px;
+    }
+
+    /* ── PANELS ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    /* ── HERO (THE FRONTIER) ── */
+    .hero {
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #0D0618 0%, #1A0A2E 40%, #2D1410 80%, #1A0A0A 100%);
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(232, 98, 42, 0.12) 0%, transparent 70%);
+      top: 50%;
+      right: 10%;
+      transform: translateY(-50%);
+    }
+
+    .hero-image-wrap {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 55%;
+      overflow: hidden;
+    }
+
+    .hero-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0.65;
+      mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.5) 20%, black 60%);
+      -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.5) 20%, black 60%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 80px 48px;
+      max-width: 560px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--sunset-orange);
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 64px;
+      font-weight: 900;
+      line-height: 1.05;
+      background: linear-gradient(135deg, #F5E6C8 30%, var(--sunset-gold) 70%, var(--sunset-orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 24px;
+    }
+
+    .hero-sub {
+      font-size: 16px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      max-width: 420px;
+      margin-bottom: 40px;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--sunset-orange), var(--sunset-crimson));
+      color: var(--text-primary);
+      padding: 14px 28px;
+      border-radius: 4px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+
+    .hero-cta:hover { opacity: 0.85; }
+
+    /* ── FEATURE GRID ── */
+    .section {
+      padding: 72px 48px;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 4px;
+      color: var(--sunset-orange);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 48px;
+      color: var(--text-primary);
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, rgba(26, 10, 46, 0.8), rgba(45, 20, 10, 0.4));
+      border: 1px solid rgba(232, 98, 42, 0.15);
+      border-radius: 8px;
+      padding: 32px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(232, 98, 42, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .feature-icon { font-size: 32px; margin-bottom: 16px; }
+
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--pale-gold);
+      margin-bottom: 12px;
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ── THE TRAIL (ABOUT) ── */
+    .about-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      padding: 80px 48px;
+    }
+
+    .about-image img {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid rgba(232, 98, 42, 0.2);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+    }
+
+    .about-text .section-label { margin-bottom: 12px; }
+
+    .about-text h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, var(--text-primary), var(--sunset-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .about-text p {
+      color: var(--text-dim);
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .timeline {
+      margin-top: 40px;
+      position: relative;
+      padding-left: 24px;
+      border-left: 2px solid rgba(232, 98, 42, 0.25);
+    }
+
+    .timeline-item {
+      margin-bottom: 32px;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -31px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      background: var(--sunset-orange);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--sunset-orange);
+    }
+
+    .timeline-item .year {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--sunset-orange);
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .timeline-item h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      color: var(--pale-gold);
+      margin-bottom: 6px;
+    }
+
+    .timeline-item p {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* ── THE POSSE (TEAM) ── */
+    .posse-section { padding: 80px 48px; }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 48px;
+    }
+
+    .team-card {
+      background: linear-gradient(160deg, rgba(26, 10, 46, 0.9), rgba(13, 6, 24, 0.6));
+      border: 1px solid rgba(232, 98, 42, 0.12);
+      border-radius: 8px;
+      padding: 36px 28px;
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .team-card:hover {
+      border-color: rgba(232, 98, 42, 0.35);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+
+    .team-avatar {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--sunset-orange), var(--deep-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin: 0 auto 20px;
+      border: 2px solid rgba(232, 98, 42, 0.3);
+    }
+
+    .team-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: var(--pale-gold);
+      margin-bottom: 6px;
+    }
+
+    .team-role {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--sunset-orange);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .team-bio {
+      font-size: 13px;
+      color: var(--text-dim);
+      line-height: 1.7;
+    }
+
+    /* ── THE HORIZON (ROADMAP) ── */
+    .horizon-section { padding: 80px 48px; }
+
+    .roadmap {
+      margin-top: 48px;
+      display: grid;
+      gap: 0;
+    }
+
+    .roadmap-phase {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 32px;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(232, 98, 42, 0.1);
+      position: relative;
+    }
+
+    .roadmap-phase:last-child { border-bottom: none; }
+
+    .phase-label {
+      text-align: right;
+      padding-top: 4px;
+    }
+
+    .phase-label .phase-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--sunset-orange);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .phase-label .phase-period {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .phase-content h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--pale-gold);
+      margin-bottom: 12px;
+    }
+
+    .phase-content p {
+      font-size: 14px;
+      color: var(--text-dim);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .phase-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .phase-item {
+      background: rgba(232, 98, 42, 0.08);
+      border: 1px solid rgba(232, 98, 42, 0.2);
+      border-radius: 4px;
+      padding: 6px 14px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--text-primary);
+      letter-spacing: 1px;
+    }
+
+    .phase-item.done {
+      background: rgba(232, 98, 42, 0.2);
+      border-color: var(--sunset-orange);
+      color: var(--sunset-gold);
+    }
+
+    .phase-item.done::before { content: '✓ '; }
+
+    /* ── DIVIDER ── */
+    .sunset-divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--sunset-orange), var(--sunset-gold), var(--sunset-orange), transparent);
+      margin: 0 48px;
+      opacity: 0.3;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid rgba(232, 98, 42, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    footer .brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      background: linear-gradient(135deg, var(--sunset-gold), var(--sunset-orange));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    footer .copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: var(--text-dim);
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="logo">GWALLUP</div>
+      <div class="tagline">Ride Into the Future</div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <button class="nav-tab active" onclick="showTab('frontier', this)">
+        <span class="tab-icon">🌅</span>
+        <span class="tab-label">The Frontier</span>
+        <span class="tab-number">01</span>
+      </button>
+      <button class="nav-tab" onclick="showTab('trail', this)">
+        <span class="tab-icon">🐴</span>
+        <span class="tab-label">The Trail</span>
+        <span class="tab-number">02</span>
+      </button>
+      <button class="nav-tab" onclick="showTab('posse', this)">
+        <span class="tab-icon">🤠</span>
+        <span class="tab-label">The Posse</span>
+        <span class="tab-number">03</span>
+      </button>
+      <button class="nav-tab" onclick="showTab('horizon', this)">
+        <span class="tab-icon">✦</span>
+        <span class="tab-label">The Horizon</span>
+        <span class="tab-number">04</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-footer">
+      <p>GWALLUP PROTOCOL<br />EST. 2026<br />AI × FRONTIER</p>
+    </div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- HEADER -->
+    <header class="site-header">
+      <div class="header-breadcrumb">
+        <span class="crumb-root">GWALLUP</span>
+        <span class="crumb-sep">›</span>
+        <span class="crumb-current" id="header-crumb">The Frontier</span>
+      </div>
+      <div class="header-meta">
+        <div class="status-pill">
+          <div class="status-dot"></div>
+          <span>RIDING LIVE</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ── 01 THE FRONTIER ── -->
+    <div class="panel active" id="panel-frontier">
+      <div class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-glow"></div>
+        <div class="hero-image-wrap">
+          <img src="mason_sunset.png" alt="Mason riding into the sunset" />
+        </div>
+        <div class="hero-content">
+          <p class="hero-eyebrow">// The Frontier Awaits</p>
+          <h1 class="hero-title">Ride Into<br />the AI<br />Sunset</h1>
+          <p class="hero-sub">
+            Where the old west meets the new intelligence. GWALLUP is the protocol for those bold enough to gallop toward the horizon — no map, just momentum.
+          </p>
+          <button class="hero-cta" onclick="showTabByName('trail')">
+            Hit the Trail →
+          </button>
+        </div>
+      </div>
+
+      <div class="sunset-divider"></div>
+
+      <div class="section">
+        <p class="section-label">// What We Build</p>
+        <h2 class="section-title">Tools for the Modern Outlaw</h2>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title">Autonomous Agents</h3>
+            <p class="feature-desc">AI riders that work the land while you sleep. Intelligent, tireless, and loyal to the mission.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🗺️</div>
+            <h3 class="feature-title">Frontier Mapping</h3>
+            <p class="feature-desc">Navigate uncharted AI territory with precision. Every trail blazed, every dead end documented.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔥</div>
+            <h3 class="feature-title">Sunset Protocol</h3>
+            <p class="feature-desc">When old systems die, new ones rise from the embers. GWALLUP accelerates that transition.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 02 THE TRAIL ── -->
+    <div class="panel" id="panel-trail">
+      <div class="about-layout">
+        <div class="about-image">
+          <img src="mason_sunset.png" alt="Mason — the rider" />
+        </div>
+        <div class="about-text">
+          <p class="section-label">// The Story</p>
+          <h2>One rider.<br />One horizon.<br />No limits.</h2>
+          <p>
+            Mason didn't wait for the trail to be paved. He saddled up, pointed toward the fading light, and rode. That's the GWALLUP ethos — move toward the unknown with confidence, not caution.
+          </p>
+          <p>
+            Built at the intersection of AI intelligence and frontier spirit, GWALLUP is less a product and more a philosophy. We believe the next era of technology belongs to those willing to outpace the sunset.
+          </p>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <p class="year">2024 — ORIGIN</p>
+              <h4>The Idea Sparks</h4>
+              <p>Mason sees the sunset. Decides to ride toward it instead of away.</p>
+            </div>
+            <div class="timeline-item">
+              <p class="year">2025 — BUILD</p>
+              <h4>First Hoofbeats</h4>
+              <p>The GWALLUP protocol takes shape. Agents deployed. Trails mapped.</p>
+            </div>
+            <div class="timeline-item">
+              <p class="year">2026 — NOW</p>
+              <h4>Full Gallop</h4>
+              <p>Live, breathing, riding. The frontier is open. The posse is assembling.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 03 THE POSSE ── -->
+    <div class="panel" id="panel-posse">
+      <div class="posse-section">
+        <p class="section-label">// The Crew</p>
+        <h2 class="section-title">Every Rider Needs a Posse</h2>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-avatar">🤠</div>
+            <h3 class="team-name">Mason</h3>
+            <p class="team-role">The Rider — Founder</p>
+            <p class="team-bio">Spotted the sunset. Saddled up. Still riding. Mason leads from the front — always toward the light on the horizon.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">🌵</div>
+            <h3 class="team-name">The Scout</h3>
+            <p class="team-role">AI Infrastructure</p>
+            <p class="team-bio">Maps the terrain before the posse arrives. Builds the systems that let everyone else ride faster.</p>
+          </div>
+          <div class="team-card">
+            <div class="team-avatar">🔭</div>
+            <h3 class="team-name">The Watcher</h3>
+            <p class="team-role">Vision & Strategy</p>
+            <p class="team-bio">Eyes always on the horizon. Knows what's coming before it arrives. The posse's north star.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── 04 THE HORIZON ── -->
+    <div class="panel" id="panel-horizon">
+      <div class="horizon-section">
+        <p class="section-label">// What's Coming</p>
+        <h2 class="section-title">The Horizon Never Stops Moving</h2>
+
+        <div class="roadmap">
+          <div class="roadmap-phase">
+            <div class="phase-label">
+              <span class="phase-tag">Phase I</span>
+              <span class="phase-period">Q1 2026</span>
+            </div>
+            <div class="phase-content">
+              <h3>Break Camp</h3>
+              <p>Lay the foundation. Establish the protocol. Get the horse moving.</p>
+              <div class="phase-items">
+                <span class="phase-item done">Core Protocol</span>
+                <span class="phase-item done">Agent Framework</span>
+                <span class="phase-item done">Launch Site</span>
+                <span class="phase-item done">Mason Rides</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-phase">
+            <div class="phase-label">
+              <span class="phase-tag">Phase II</span>
+              <span class="phase-period">Q2 2026</span>
+            </div>
+            <div class="phase-content">
+              <h3>Open Range</h3>
+              <p>Expand the territory. Bring in the posse. Build the infrastructure for scale.</p>
+              <div class="phase-items">
+                <span class="phase-item">Posse Onboarding</span>
+                <span class="phase-item">API Gateway</span>
+                <span class="phase-item">Trail Maps v2</span>
+                <span class="phase-item">Frontier Dashboard</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-phase">
+            <div class="phase-label">
+              <span class="phase-tag">Phase III</span>
+              <span class="phase-period">Q3 2026</span>
+            </div>
+            <div class="phase-content">
+              <h3>Full Gallop</h3>
+              <p>No brakes. The protocol runs itself. The riders multiply. The sunset gets closer.</p>
+              <div class="phase-items">
+                <span class="phase-item">Autonomous Swarms</span>
+                <span class="phase-item">Cross-Chain Trails</span>
+                <span class="phase-item">Sunset Protocol v1</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="roadmap-phase">
+            <div class="phase-label">
+              <span class="phase-tag">Phase IV</span>
+              <span class="phase-period">Beyond</span>
+            </div>
+            <div class="phase-content">
+              <h3>Into the Sun</h3>
+              <p>The horizon was never the destination. It was just the direction.</p>
+              <div class="phase-items">
+                <span class="phase-item">??? </span>
+                <span class="phase-item">🌅</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <span class="brand">GWALLUP</span>
+      <span class="copy">© 2026 — RIDE INTO THE FUTURE — AI × FRONTIER</span>
+    </footer>
+
+  </main>
+
+  <script>
+    const crumbs = {
+      frontier: 'The Frontier',
+      trail: 'The Trail',
+      posse: 'The Posse',
+      horizon: 'The Horizon'
+    };
+
+    function showTab(name, btn) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+      document.getElementById('panel-' + name).classList.add('active');
+      btn.classList.add('active');
+      document.getElementById('header-crumb').textContent = crumbs[name];
+      window.scrollTo(0, 0);
+    }
+
+    function showTabByName(name) {
+      const tabs = document.querySelectorAll('.nav-tab');
+      const names = ['frontier', 'trail', 'posse', 'horizon'];
+      const idx = names.indexOf(name);
+      if (idx >= 0) showTab(name, tabs[idx]);
+    }
+  </script>
+</body>
+</html>
